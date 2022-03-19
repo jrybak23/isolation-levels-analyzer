@@ -12,7 +12,7 @@ import static com.example.isolationlevelsdemo.DbConstants.INITIAL_VALUE;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 
-//@Component
+@Component
 public class NonRepeatableReadAnalysis implements Analysis {
     @Override
     public String getEffectName() {

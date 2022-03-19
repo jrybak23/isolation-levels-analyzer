@@ -1,19 +1,18 @@
 package com.example.isolationlevelsdemo.analises;
 
 import com.example.isolationlevelsdemo.model.TestModel;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.OptimisticLockException;
 import javax.persistence.RollbackException;
 
 import static com.example.isolationlevelsdemo.DbConstants.INITIAL_VALUE;
-import static com.example.isolationlevelsdemo.DbConstants.VALUE_COLUMN_INDEX;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 
-//@Component
+@Component
 public class SerializationAnomalyAnalysis implements Analysis {
     @Override
     public String getEffectName() {
@@ -50,9 +49,13 @@ public class SerializationAnomalyAnalysis implements Analysis {
                 model.setValue("value inserted by 1-nd connection");
                 entityManager1.persist(model);
 
-                return !entityManager1.createQuery("from TestModel t where t.value = 'value inserted by 2-nd connection'")
-                        .getResultList()
-                        .isEmpty();
+                try {
+                    return !entityManager1.createQuery("from TestModel t where t.value = 'value inserted by 2-nd connection'")
+                            .getResultList()
+                            .isEmpty();
+                } catch (RollbackException | OptimisticLockException e) {
+                    return false;
+                }
             });
         } catch (RollbackException e) {
             return false;

@@ -1,20 +1,16 @@
 package com.example.isolationlevelsdemo.analises;
 
-import com.example.isolationlevelsdemo.TransactionUtils;
 import com.example.isolationlevelsdemo.model.TestModel;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.RollbackException;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.example.isolationlevelsdemo.DbConstants.INITIAL_VALUE;
-import static com.example.isolationlevelsdemo.DbConstants.VALUE_COLUMN_INDEX;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 
@@ -35,10 +31,10 @@ public class PhantomReadAnalysis implements Analysis {
 
             try {
                 runInTransaction(entityManagerFactory, entityManager2 -> {
-                    String value2 = getValue(entityManager2);
+                    /*String value2 = getValue(entityManager2);
                     if (!value2.equals(INITIAL_VALUE)) {
                         throw new RuntimeException();
-                    }
+                    }*/
 
                     TestModel model = new TestModel();
                     model.setId(3);

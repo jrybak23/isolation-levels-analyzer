@@ -2,19 +2,18 @@ package com.example.isolationlevelsdemo;
 
 import com.example.isolationlevelsdemo.analises.Analysis;
 import com.example.isolationlevelsdemo.config.EntityManagerFactoryFactory;
+import com.example.isolationlevelsdemo.databases.DatabaseToAnalyze;
 import com.example.isolationlevelsdemo.model.TestModel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.MySQLContainer;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,6 +22,7 @@ import java.util.List;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 
 @SpringBootApplication
+@Slf4j
 public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
 
     public static final String USERNAME = "username";
@@ -33,6 +33,9 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
     List<Analysis> analyses;
 
     @Autowired
+    List<DatabaseToAnalyze> databaseConfigs;
+
+    @Autowired
     EntityManagerFactoryFactory entityManagerFactoryFactory;
 
     public static void main(String[] args) {
@@ -41,20 +44,29 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        JdbcDatabaseContainer<?> db = startPostgresContainer();
-        DataSource dataSource = createDatasource(db);
-        EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource);
+        for (DatabaseToAnalyze databaseConfig : databaseConfigs) {
+            JdbcDatabaseContainer<?> container = databaseConfig.getContainer();
+            String dockerImageName = container.getDockerImageName();
+            log.info("Analyzing database " + dockerImageName);
+            startContainer(container);
+            DataSource dataSource = createDatasource(container);
+            EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
+                    databaseConfig.getDialect());
 
-        for (Analysis analysis : analyses) {
-            populateDB(emFactory);
-            boolean reproduced = analysis.isReproducible(emFactory);
-            String out = analysis.getEffectName() + " is" + (reproduced ? "" : " not") + " reproduced.";
-            System.out.println(out);
-            cleanTable(emFactory);
+            for (Analysis analysis : analyses) {
+                cleanTable(emFactory);
+                populateDB(emFactory);
+                log.info("Performing " + analysis.getEffectName() + " for DB " + dockerImageName);
+                boolean reproduced = analysis.isReproducible(emFactory);
+                String out = analysis.getEffectName() + " is" + (reproduced ? "" : " not") + " reproduced for " + dockerImageName;
+                log.info(out);
+            }
         }
+
     }
 
     private void populateDB(EntityManagerFactory emFactory) {
+        log.info("Populating table with test data.");
         runInTransaction(emFactory, (entityManager) -> {
             TestModel model = new TestModel();
             model.setId(1);
@@ -63,10 +75,11 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
         });
     }
 
-    @SneakyThrows
     private void cleanTable(EntityManagerFactory entityManagerFactory) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.createQuery("delete from TestModel t");
+        log.info("Cleaning table.");
+        runInTransaction(entityManagerFactory, entityManager -> {
+            entityManager.createQuery("delete from TestModel t").executeUpdate();
+        });
     }
 
     @NotNull
@@ -82,18 +95,12 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
         return new HikariDataSource(config);
     }
 
-    @NotNull
-    private JdbcDatabaseContainer<?> startPostgresContainer() {
-        JdbcDatabaseContainer<?> db = new MySQLContainer<>("mysql:8")
+    private void startContainer(JdbcDatabaseContainer<?> container) {
+        container
                 .withDatabaseName(DB_NAME)
                 .withUsername(USERNAME)
-                .withPassword(PASSWORD);
-        /*PostgreSQLContainer<?> db = new PostgreSQLContainer<>("postgres:13")
-                .withDatabaseName(DB_NAME)
-                .withUsername(USERNAME)
-                .withPassword(PASSWORD);*/
-        db.start();
-        return db;
+                .withPassword(PASSWORD)
+                .start();
     }
 
 
