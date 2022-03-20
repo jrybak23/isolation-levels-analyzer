@@ -9,16 +9,17 @@ import com.example.isolationlevelsdemo.model.TestModel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
+import static java.util.stream.Collectors.toList;
 
 @Component
 @Slf4j
@@ -31,39 +32,42 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
     List<Analysis> analyses;
 
     @Autowired
-    List<DatabaseToAnalyze> databaseConfigs;
+    List<DatabaseToAnalyze> databasesToAnalyze;
 
     @Autowired
     EntityManagerFactoryFactory entityManagerFactoryFactory;
 
     @Override
     public List<DatabaseAnalysisResult> analyzeDatabases() {
-        List<DatabaseAnalysisResult> results = new ArrayList<>();
-        for (DatabaseToAnalyze databaseConfig : databaseConfigs) {
-            JdbcDatabaseContainer<?> container = databaseConfig.getContainer();
-            String dockerImageName = container.getDockerImageName();
-            DatabaseAnalysisResult databaseAnalysisResult = new DatabaseAnalysisResult(dockerImageName);
-            results.add(databaseAnalysisResult);
-            log.info("Analyzing database " + dockerImageName);
-            startContainer(container);
-            for (IsolationLevel isolationLevel : IsolationLevel.values()) {
-                DataSource dataSource = createDatasource(container, isolationLevel);
-                EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
-                        databaseConfig.getDialect());
-                for (Analysis analysis : analyses) {
-                    cleanTable(emFactory);
-                    populateDB(emFactory);
-                    String effectName = analysis.getEffectName();
-                    log.info("Performing " + effectName + " with isolation level " + isolationLevel + " for DB " + dockerImageName);
-                    boolean reproduced = analysis.isReproducible(emFactory);
-                    String out = effectName + " is" + (reproduced ? "" : " not") + " reproduced for " + dockerImageName;
-                    log.info(out);
-                    AnalysisResult analysisResult = new AnalysisResult(isolationLevel.getDisplayName(),effectName, reproduced);
-                    databaseAnalysisResult.addAnalysis(analysisResult);
-                }
+        return databasesToAnalyze.stream()
+                .map(this::analyzeDatabase)
+                .collect(toList());
+    }
+
+    @NotNull
+    private DatabaseAnalysisResult analyzeDatabase(DatabaseToAnalyze databaseToAnalyze) {
+        JdbcDatabaseContainer<?> container = databaseToAnalyze.getContainer();
+        String dockerImageName = container.getDockerImageName();
+        DatabaseAnalysisResult databaseAnalysisResult = new DatabaseAnalysisResult(dockerImageName);
+        log.info("Analyzing database " + dockerImageName);
+        startContainer(container);
+        for (IsolationLevel isolationLevel : IsolationLevel.values()) {
+            DataSource dataSource = createDatasource(container, isolationLevel);
+            EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
+                    databaseToAnalyze.getDialect());
+            for (Analysis analysis : analyses) {
+                cleanTable(emFactory);
+                populateDB(emFactory);
+                String effectName = analysis.getEffectName();
+                log.info("Performing " + effectName + " with isolation level " + isolationLevel + " for DB " + dockerImageName);
+                boolean reproduced = analysis.isReproducible(emFactory);
+                String out = effectName + " is" + (reproduced ? "" : " not") + " reproduced for " + dockerImageName;
+                log.info(out);
+                AnalysisResult analysisResult = new AnalysisResult(isolationLevel.getDisplayName(), effectName, reproduced);
+                databaseAnalysisResult.addAnalysis(analysisResult);
             }
         }
-        return results;
+        return databaseAnalysisResult;
     }
 
 
