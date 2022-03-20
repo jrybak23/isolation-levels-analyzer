@@ -49,17 +49,19 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
             String dockerImageName = container.getDockerImageName();
             log.info("Analyzing database " + dockerImageName);
             startContainer(container);
-            DataSource dataSource = createDatasource(container);
-            EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
-                    databaseConfig.getDialect());
+            for (IsolationLevel isolationLevel : IsolationLevel.values()) {
+                DataSource dataSource = createDatasource(container, isolationLevel);
+                EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
+                        databaseConfig.getDialect());
 
-            for (Analysis analysis : analyses) {
-                cleanTable(emFactory);
-                populateDB(emFactory);
-                log.info("Performing " + analysis.getEffectName() + " for DB " + dockerImageName);
-                boolean reproduced = analysis.isReproducible(emFactory);
-                String out = analysis.getEffectName() + " is" + (reproduced ? "" : " not") + " reproduced for " + dockerImageName;
-                log.info(out);
+                for (Analysis analysis : analyses) {
+                    cleanTable(emFactory);
+                    populateDB(emFactory);
+                    log.info("Performing " + analysis.getEffectName() + " with isolation level " + isolationLevel + " for DB " + dockerImageName);
+                    boolean reproduced = analysis.isReproducible(emFactory);
+                    String out = analysis.getEffectName() + " is" + (reproduced ? "" : " not") + " reproduced for " + dockerImageName;
+                    log.info(out);
+                }
             }
         }
 
@@ -83,7 +85,7 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
     }
 
     @NotNull
-    private DataSource createDatasource(JdbcDatabaseContainer<?> db) {
+    private DataSource createDatasource(JdbcDatabaseContainer<?> db, IsolationLevel isolationLevel) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(db.getJdbcUrl());
         config.setUsername(USERNAME);

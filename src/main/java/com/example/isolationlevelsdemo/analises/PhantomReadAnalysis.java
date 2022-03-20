@@ -31,10 +31,10 @@ public class PhantomReadAnalysis implements Analysis {
 
             try {
                 runInTransaction(entityManagerFactory, entityManager2 -> {
-                    /*String value2 = getValue(entityManager2);
+                    String value2 = getValue(entityManager2);
                     if (!value2.equals(INITIAL_VALUE)) {
                         throw new RuntimeException();
-                    }*/
+                    }
 
                     TestModel model = new TestModel();
                     model.setId(3);
