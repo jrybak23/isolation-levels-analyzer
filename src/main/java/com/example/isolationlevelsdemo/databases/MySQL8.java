@@ -9,7 +9,7 @@ import org.testcontainers.containers.MySQLContainer;
 @Component
 public class MySQL8 implements DatabaseToAnalyze {
     @Override
-    public JdbcDatabaseContainer<?> getContainer() {
+    public JdbcDatabaseContainer<?> createContainer() {
         return new MySQLContainer<>("mysql:8");
     }
 

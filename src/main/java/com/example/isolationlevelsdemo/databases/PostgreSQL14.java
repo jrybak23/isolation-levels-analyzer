@@ -9,7 +9,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @Component
 public class PostgreSQL14 implements DatabaseToAnalyze {
     @Override
-    public JdbcDatabaseContainer<?> getContainer() {
+    public JdbcDatabaseContainer<?> createContainer() {
         return new PostgreSQLContainer<>("postgres:14");
     }
 

@@ -46,7 +46,7 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
 
     @NotNull
     private DatabaseAnalysisResult analyzeDatabase(DatabaseToAnalyze databaseToAnalyze) {
-        JdbcDatabaseContainer<?> container = databaseToAnalyze.getContainer();
+        JdbcDatabaseContainer<?> container = databaseToAnalyze.createContainer();
         String dockerImageName = container.getDockerImageName();
         DatabaseAnalysisResult databaseAnalysisResult = new DatabaseAnalysisResult(dockerImageName);
         log.info("Analyzing database " + dockerImageName);

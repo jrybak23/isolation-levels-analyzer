@@ -4,7 +4,7 @@ import org.hibernate.dialect.Dialect;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
 public interface DatabaseToAnalyze {
-    JdbcDatabaseContainer<?> getContainer();
+    JdbcDatabaseContainer<?> createContainer();
 
     Class<? extends Dialect> getDialect();
 }
