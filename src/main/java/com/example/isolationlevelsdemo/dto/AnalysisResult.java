@@ -1,4 +1,4 @@
-package com.example.isolationlevelsdemo;
+package com.example.isolationlevelsdemo.dto;
 
 import lombok.Getter;
 import lombok.ToString;

@@ -1,0 +1,132 @@
+[
+  {
+    "databaseName": "mysql:8",
+    "analysis": [
+      {
+        "isolationLevel": "Read Uncommitted",
+        "reproduced": true,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Read Uncommitted",
+        "reproduced": true,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Read Uncommitted",
+        "reproduced": true,
+        "effectName": "Serialization Anomaly"
+      },
+      {
+        "isolationLevel": "Read Committed",
+        "reproduced": true,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Read Committed",
+        "reproduced": true,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Read Committed",
+        "reproduced": true,
+        "effectName": "Serialization Anomaly"
+      },
+      {
+        "isolationLevel": "Repeatable Read",
+        "reproduced": false,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Repeatable Read",
+        "reproduced": false,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Repeatable Read",
+        "reproduced": false,
+        "effectName": "Serialization Anomaly"
+      },
+      {
+        "isolationLevel": "Serializable",
+        "reproduced": false,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Serializable",
+        "reproduced": true,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Serializable",
+        "reproduced": true,
+        "effectName": "Serialization Anomaly"
+      }
+    ]
+  },
+  {
+    "databaseName": "postgres:14",
+    "analysis": [
+      {
+        "isolationLevel": "Read Uncommitted",
+        "reproduced": true,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Read Uncommitted",
+        "reproduced": true,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Read Uncommitted",
+        "reproduced": true,
+        "effectName": "Serialization Anomaly"
+      },
+      {
+        "isolationLevel": "Read Committed",
+        "reproduced": true,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Read Committed",
+        "reproduced": true,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Read Committed",
+        "reproduced": true,
+        "effectName": "Serialization Anomaly"
+      },
+      {
+        "isolationLevel": "Repeatable Read",
+        "reproduced": false,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Repeatable Read",
+        "reproduced": false,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Repeatable Read",
+        "reproduced": false,
+        "effectName": "Serialization Anomaly"
+      },
+      {
+        "isolationLevel": "Serializable",
+        "reproduced": false,
+        "effectName": "Non Repeatable Read"
+      },
+      {
+        "isolationLevel": "Serializable",
+        "reproduced": false,
+        "effectName": "Phantom Read"
+      },
+      {
+        "isolationLevel": "Serializable",
+        "reproduced": false,
+        "effectName": "Serialization Anomaly"
+      }
+    ]
+  }
+]

@@ -3,6 +3,8 @@ package com.example.isolationlevelsdemo;
 import com.example.isolationlevelsdemo.analises.Analysis;
 import com.example.isolationlevelsdemo.config.EntityManagerFactoryFactory;
 import com.example.isolationlevelsdemo.databases.DatabaseToAnalyze;
+import com.example.isolationlevelsdemo.dto.AnalysisResult;
+import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
 import com.example.isolationlevelsdemo.model.TestModel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
