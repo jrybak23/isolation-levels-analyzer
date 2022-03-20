@@ -92,7 +92,7 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
         config.setPassword(PASSWORD);
         config.setDriverClassName(db.getJdbcDriverInstance().getClass().getName());
         int i = Connection.TRANSACTION_SERIALIZABLE;
-        config.setTransactionIsolation("TRANSACTION_SERIALIZABLE");
+        config.setTransactionIsolation(isolationLevel.getJdbcName());
         config.setAutoCommit(false);
         return new HikariDataSource(config);
     }
