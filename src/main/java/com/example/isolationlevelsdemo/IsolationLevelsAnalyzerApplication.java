@@ -1,6 +1,7 @@
 package com.example.isolationlevelsdemo;
 
 import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
+import com.example.isolationlevelsdemo.service.IsolationLevelAnalyzer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

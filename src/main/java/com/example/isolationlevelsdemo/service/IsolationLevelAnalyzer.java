@@ -1,4 +1,4 @@
-package com.example.isolationlevelsdemo;
+package com.example.isolationlevelsdemo.service;
 
 import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
 

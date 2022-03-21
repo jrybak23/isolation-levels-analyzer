@@ -1,5 +1,6 @@
-package com.example.isolationlevelsdemo;
+package com.example.isolationlevelsdemo.service;
 
+import com.example.isolationlevelsdemo.IsolationLevel;
 import com.example.isolationlevelsdemo.analises.Analysis;
 import com.example.isolationlevelsdemo.config.EntityManagerFactoryFactory;
 import com.example.isolationlevelsdemo.databases.DatabaseToAnalyze;
