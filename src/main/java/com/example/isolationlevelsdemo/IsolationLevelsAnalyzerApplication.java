@@ -28,10 +28,10 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
     private TableConverter tableConverter;
 
     @Autowired
-    private TableModelJsonConvertor jsonConvertor;
+    private JsonResultWriter jsonResultWriter;
 
     @Autowired
-    private ResultFileGenerator resultFileGenerator;
+    private CSVResultWriter csvResultWriter;
 
     public static void main(String[] args) {
         SpringApplication.run(IsolationLevelsAnalyzerApplication.class, args);
@@ -45,8 +45,8 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
             List<DatabaseAnalysisResultTable> tables = databaseAnalysisResults.stream()
                     .map(databaseAnalysisResult -> tableConverter.convertToTable(databaseAnalysisResult))
                     .collect(toList());
-            String json = jsonConvertor.convert(tables);
-            resultFileGenerator.writeToFile(json, "result.json");
+            jsonResultWriter.writeToFile(tables);
+            csvResultWriter.writeToFiles(tables);
         }
     }
 

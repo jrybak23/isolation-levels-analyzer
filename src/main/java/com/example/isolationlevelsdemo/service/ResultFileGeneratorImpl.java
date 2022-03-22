@@ -13,6 +13,7 @@ public class ResultFileGeneratorImpl implements ResultFileGenerator {
         FileWriter fileWriter = new FileWriter(fileName);
         try (fileWriter) {
             fileWriter.write(fileContent);
+            fileWriter.flush();
         }
     }
 }
