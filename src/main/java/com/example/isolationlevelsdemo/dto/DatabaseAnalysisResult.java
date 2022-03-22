@@ -10,13 +10,14 @@ import java.util.List;
 @Getter
 public class DatabaseAnalysisResult {
     private final String databaseName;
-    private final List<AnalysisResult> analysis = new ArrayList<>();
+    private final List<IsolationLevelAnalysisResult> isolationLevels = new ArrayList<>();
 
     public DatabaseAnalysisResult(String databaseName) {
         this.databaseName = databaseName;
     }
 
-    public void addAnalysis(AnalysisResult analysisResult) {
-        analysis.add(analysisResult);
+    public void addIsolationLevelAnalysis(IsolationLevelAnalysisResult analysis) {
+        this.isolationLevels.add(analysis);
     }
+
 }

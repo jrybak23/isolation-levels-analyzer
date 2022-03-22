@@ -7,12 +7,10 @@ import lombok.ToString;
 @Getter
 public class AnalysisResult {
 
-    private final String isolationLevel;
     private final String effectName;
     private final boolean reproduced;
 
-    public AnalysisResult(String isolationLevel, String effectName, boolean reproduced) {
-        this.isolationLevel = isolationLevel;
+    public AnalysisResult(String effectName, boolean reproduced) {
         this.effectName = effectName;
         this.reproduced = reproduced;
     }

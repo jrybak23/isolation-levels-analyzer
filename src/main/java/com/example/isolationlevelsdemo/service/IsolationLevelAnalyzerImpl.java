@@ -6,6 +6,7 @@ import com.example.isolationlevelsdemo.config.EntityManagerFactoryFactory;
 import com.example.isolationlevelsdemo.databases.DatabaseToAnalyze;
 import com.example.isolationlevelsdemo.dto.AnalysisResult;
 import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
+import com.example.isolationlevelsdemo.dto.IsolationLevelAnalysisResult;
 import com.example.isolationlevelsdemo.model.TestModel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -17,6 +18,7 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
@@ -53,6 +55,8 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
         log.info("Analyzing database " + dockerImageName);
         startContainer(container);
         for (IsolationLevel isolationLevel : IsolationLevel.values()) {
+            IsolationLevelAnalysisResult isolationLevelAnalysis = new IsolationLevelAnalysisResult(isolationLevel.getDisplayName());
+            databaseAnalysisResult.addIsolationLevelAnalysis(isolationLevelAnalysis);
             DataSource dataSource = createDatasource(container, isolationLevel);
             EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
                     databaseToAnalyze.getDialect());
@@ -60,17 +64,20 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
                 cleanTable(emFactory);
                 populateDB(emFactory);
                 String effectName = analysis.getEffectName();
-                log.info("Performing " + effectName + " with isolation level " + isolationLevel + " for DB " + dockerImageName);
+                log.info("Performing {} with isolation level {} for DB {}", effectName, isolationLevel, dockerImageName);
                 boolean reproduced = analysis.isReproducible(emFactory);
-                String out = effectName + " is" + (reproduced ? "" : " not") + " reproduced for " + dockerImageName;
-                log.info(out);
-                AnalysisResult analysisResult = new AnalysisResult(isolationLevel.getDisplayName(), effectName, reproduced);
-                databaseAnalysisResult.addAnalysis(analysisResult);
+                String result = getResultAsString(reproduced);
+                log.info("{} is {} with isolation level {} for {}", effectName, result, isolationLevel, dockerImageName);
+                AnalysisResult analysisResult = new AnalysisResult(effectName, reproduced);
+                isolationLevelAnalysis.addAnalysis(analysisResult);
             }
         }
         return databaseAnalysisResult;
     }
 
+    private String getResultAsString(boolean reproduced) {
+        return (reproduced ? "" : "not ") + "reproduced";
+    }
 
     private void populateDB(EntityManagerFactory emFactory) {
         log.info("Populating table with test data.");
