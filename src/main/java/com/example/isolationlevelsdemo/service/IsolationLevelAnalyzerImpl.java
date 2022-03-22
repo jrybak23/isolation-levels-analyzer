@@ -68,7 +68,7 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
                 boolean reproduced = analysis.isReproducible(emFactory);
                 String result = getResultAsString(reproduced);
                 log.info("{} is {} with isolation level {} for {}", effectName, result, isolationLevel, dockerImageName);
-                AnalysisResult analysisResult = new AnalysisResult(effectName, reproduced);
+                AnalysisResult analysisResult = new AnalysisResult(effectName, result);
                 isolationLevelAnalysis.addAnalysis(analysisResult);
             }
         }

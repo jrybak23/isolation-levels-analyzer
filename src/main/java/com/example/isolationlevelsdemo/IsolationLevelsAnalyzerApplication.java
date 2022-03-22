@@ -1,9 +1,7 @@
 package com.example.isolationlevelsdemo;
 
 import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
-import com.example.isolationlevelsdemo.service.DatabaseAnalysisResultTable;
-import com.example.isolationlevelsdemo.service.IsolationLevelAnalyzer;
-import com.example.isolationlevelsdemo.service.TableConverter;
+import com.example.isolationlevelsdemo.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +11,6 @@ import org.springframework.core.env.Environment;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -30,6 +27,12 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
     @Autowired
     private TableConverter tableConverter;
 
+    @Autowired
+    private TableModelJsonConvertor jsonConvertor;
+
+    @Autowired
+    private ResultFileGenerator resultFileGenerator;
+
     public static void main(String[] args) {
         SpringApplication.run(IsolationLevelsAnalyzerApplication.class, args);
     }
@@ -42,7 +45,8 @@ public class IsolationLevelsAnalyzerApplication implements CommandLineRunner {
             List<DatabaseAnalysisResultTable> tables = databaseAnalysisResults.stream()
                     .map(databaseAnalysisResult -> tableConverter.convertToTable(databaseAnalysisResult))
                     .collect(toList());
-            System.out.println(tables);
+            String json = jsonConvertor.convert(tables);
+            resultFileGenerator.writeToFile(json, "result.json");
         }
     }
 

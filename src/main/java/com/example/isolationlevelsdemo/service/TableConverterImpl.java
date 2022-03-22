@@ -4,7 +4,6 @@ import com.example.isolationlevelsdemo.analises.Analysis;
 import com.example.isolationlevelsdemo.dto.AnalysisResult;
 import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
 import com.example.isolationlevelsdemo.dto.IsolationLevelAnalysisResult;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +28,9 @@ public class TableConverterImpl implements TableConverter {
         return table;
     }
 
-    @NotNull
-    private List<String> getRowCellValues(IsolationLevelAnalysisResult isolationLevel) {
-        return isolationLevel.getAnalyses().stream()
-                .map(AnalysisResult::getEffectName)
+    private List<String> getRowCellValues(IsolationLevelAnalysisResult result) {
+        return result.getAnalyses().stream()
+                .map(AnalysisResult::getResult)
                 .collect(toList());
     }
 

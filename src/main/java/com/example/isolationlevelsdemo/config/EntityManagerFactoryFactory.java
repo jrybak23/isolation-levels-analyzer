@@ -25,7 +25,7 @@ public class EntityManagerFactoryFactory {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", dialect.getName());
         properties.put("hibernate.hbm2ddl.auto", "create");
-        properties.put("javax.persistence.schema-generation.database.action", "create");
+        properties.put("javax.persistence.schema-generation.database.action", "update");
         properties.put("hibernate.id.new_generator_mappings", false);
         return properties;
     }
