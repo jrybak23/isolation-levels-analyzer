@@ -5,15 +5,15 @@
       {
         "analyses": [
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -22,15 +22,15 @@
       {
         "analyses": [
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -39,15 +39,15 @@
       {
         "analyses": [
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -56,15 +56,15 @@
       {
         "analyses": [
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -78,15 +78,15 @@
       {
         "analyses": [
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -95,15 +95,15 @@
       {
         "analyses": [
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": true,
+            "result": "reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -112,15 +112,15 @@
       {
         "analyses": [
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
@@ -129,15 +129,15 @@
       {
         "analyses": [
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Non Repeatable Read"
           },
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Phantom Read"
           },
           {
-            "reproduced": false,
+            "result": "not reproduced",
             "effectName": "Serialization Anomaly"
           }
         ],
