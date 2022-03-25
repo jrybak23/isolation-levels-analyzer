@@ -31,7 +31,7 @@ class IsolationLevelAnalyzerTest {
                 .filter(result -> KNOWN_DATABASES.contains(result.getDatabaseName()))
                 .collect(toList());
 
-        String expectedJSON = readFileContent(BASE_PATH + "assertKnowAnalysisResults.json");
+        String expectedJSON = readFileContent(BASE_PATH + "com/example/isolationlevelsdemo/assertKnowAnalysisResults.json");
         String actualJSON = new ObjectMapper().writeValueAsString(results);
         assertJSON(expectedJSON, actualJSON);
     }

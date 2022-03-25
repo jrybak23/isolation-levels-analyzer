@@ -18,7 +18,6 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;

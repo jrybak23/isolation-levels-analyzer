@@ -1,7 +1,6 @@
 package com.example.isolationlevelsdemo.analises;
 
 import com.example.isolationlevelsdemo.model.TestModel;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
