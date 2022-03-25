@@ -5,7 +5,6 @@ import com.example.isolationlevelsdemo.service.IsolationLevelAnalyzer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +16,6 @@ import static com.example.isolationlevelsdemo.testutil.TestUtil.readFileContent;
 import static java.util.stream.Collectors.toList;
 
 @SpringBootTest
-@ActiveProfiles("test")
 class IsolationLevelAnalyzerTest {
     public static final Set<String> KNOWN_DATABASES = Set.of("mysql:8", "postgres:14");
     public static final String BASE_PATH = "com/example/isolationlevelsdemo/";
