@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import static com.example.isolationlevelsdemo.Constants.RESULTS_OUTPUT_PATH;
 import static java.util.stream.Collectors.joining;
 
 @Component
@@ -20,7 +20,7 @@ public class CSVResultWriter {
     public void writeToFiles(List<DatabaseAnalysisResultTable> tables) {
         for (DatabaseAnalysisResultTable table : tables) {
             String fileName = table.getDatabaseName().replace(":", "_");
-            String filePath = "results" + File.separator + fileName + ".csv";
+            String filePath = RESULTS_OUTPUT_PATH + fileName + ".csv";
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
             try (writer) {
                 writeLines(table, writer);

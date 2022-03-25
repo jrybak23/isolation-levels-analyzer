@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.example.isolationlevelsdemo.DbConstants.INITIAL_VALUE;
+import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 

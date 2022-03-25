@@ -8,7 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.RollbackException;
 
-import static com.example.isolationlevelsdemo.DbConstants.INITIAL_VALUE;
+import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 
