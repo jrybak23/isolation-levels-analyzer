@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>analyzer</module>
+        <module>integration-tests</module>
     </modules>
     <groupId>com.example</groupId>
     <artifactId>isolation-levels-analyzer</artifactId>

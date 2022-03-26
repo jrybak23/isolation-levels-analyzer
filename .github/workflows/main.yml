@@ -22,5 +22,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+    - name: Run analyzer
+      run: mvn --projects analyzer --also-make clean spring-boot:run
+    - name: Run integration tests
+      run: mvn --projects integration-tests --also-make package
