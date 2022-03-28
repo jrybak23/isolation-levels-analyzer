@@ -1,9 +1,16 @@
 <ng-container *ngFor="let result of (results | async)">
-  <h2>{{result.databaseName}}</h2>
+  <h2><a [href]="getDockerImageLink(result.databaseName)" target="_blank">{{result.databaseName}}</a></h2>
   <table >
     <thead>
     <tr>
-      <th scope="col" *ngFor="let cellValue of result.table[0]">{{ cellValue }}</th>
+      <ng-container *ngFor="let cellValue of result.table[0]">
+        <th scope="col" *ngIf="cellValue === ''; else columnHeader"></th>
+        <ng-template #columnHeader>
+          <th scope="col">
+            <a [href]="getSourceLink(cellValue)" target="_blank">{{cellValue}}</a>
+          </th>
+        </ng-template>
+      </ng-container>
     </tr>
     </thead>
     <tbody>
