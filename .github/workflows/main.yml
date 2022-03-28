@@ -29,7 +29,7 @@ jobs:
     - name: Build results-ui
       run: npm run build
     - name: deploy results-ui to gh-pages
-      uses: JamesIves/github-pages-deploy-action@4.2.5
+      uses: JamesIves/github-pages-deploy-action@v4.2.5
       with:
         branch: gh-pages
         folder: results-ui/dist/results-ui
