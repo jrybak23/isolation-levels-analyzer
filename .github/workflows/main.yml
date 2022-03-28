@@ -29,7 +29,7 @@ jobs:
     - name: Install results-ui dependencies
       run: cd results-ui && npm i
     - name: Build results-ui
-      run: cd results-ui && npm run build
+      run: cd results-ui && npm run build-prod
     - name: deploy results-ui to gh-pages
       uses: JamesIves/github-pages-deploy-action@v4.2.5
       with:
