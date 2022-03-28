@@ -27,7 +27,7 @@ jobs:
     - name: Run integration tests
       run: mvn --projects integration-tests --also-make package
     - name: Build results-ui
-      run: npm run build
+      run: cd results-ui && npm run build
     - name: deploy results-ui to gh-pages
       uses: JamesIves/github-pages-deploy-action@v4.2.5
       with:
