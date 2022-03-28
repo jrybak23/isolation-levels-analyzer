@@ -26,6 +26,8 @@ jobs:
       run: mvn --projects analyzer --also-make clean spring-boot:run
     - name: Run integration tests
       run: mvn --projects integration-tests --also-make package
+    - name: Install results-ui dependencies
+      run: npm i
     - name: Build results-ui
       run: cd results-ui && npm run build
     - name: deploy results-ui to gh-pages
