@@ -32,5 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-results/*.csv
-results/*.json
+results-ui/src/assets/results/*.csv
+results-ui/src/assets/results/*.json

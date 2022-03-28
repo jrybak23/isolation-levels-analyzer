@@ -1,1 +1,18 @@
+<ng-container *ngFor="let result of (results | async)">
+  <h2>{{result.databaseName}}</h2>
+  <table >
+    <thead>
+    <tr>
+      <th scope="col" *ngFor="let cellValue of result.table[0]">{{ cellValue }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of result.table | slice:1">
+      <th scope="row">{{row[0]}}</th>
+      <td *ngFor="let cellValue of row | slice:1">{{cellValue}}</td>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+
 <router-outlet></router-outlet>

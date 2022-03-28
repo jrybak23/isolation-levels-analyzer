@@ -12,12 +12,11 @@ import static com.example.integrationtests.TestUtil.readClasspathFileContent;
 import static com.example.integrationtests.TestUtil.readFileContent;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 class IntegrationTestsApplicationTests {
 
-    public static final String RESULTS_OUTPUT_PATH = ".." + File.separator + "results" + File.separator;
+    public static final String RESULTS_OUTPUT_PATH = ".." + File.separator + "results-ui/src/assets/results" + File.separator;
 
     @ParameterizedTest
     @ValueSource(strings = {"mysql_8", "postgres_14"})
