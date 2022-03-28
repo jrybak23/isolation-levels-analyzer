@@ -26,3 +26,10 @@ jobs:
       run: mvn --projects analyzer --also-make clean spring-boot:run
     - name: Run integration tests
       run: mvn --projects integration-tests --also-make package
+    - name: Build results-ui
+      run: npm run build
+    - name: deploy results-ui to gh-pages
+        uses: JamesIves/github-pages-deploy-action@4.2.5
+        with:
+          branch: gh-pages
+          folder: results-ui/dist/results-ui
