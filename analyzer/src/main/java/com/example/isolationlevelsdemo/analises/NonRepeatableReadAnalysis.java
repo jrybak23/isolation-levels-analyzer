@@ -22,6 +22,15 @@ public class NonRepeatableReadAnalysis implements Analysis {
 
     @Override
     public boolean isReproducible(EntityManagerFactory entityManagerFactory) {
+        try {
+            return runFirstTransaction(entityManagerFactory);
+        } catch (RollbackException e) {
+            log.error("1st transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+            return false;
+        }
+    }
+
+    private Boolean runFirstTransaction(EntityManagerFactory entityManagerFactory) {
         return runInTransactionAndReturnValue(entityManagerFactory, entityManager1 -> {
             String initialValue = getValue(entityManager1);
             if (!initialValue.equals(INITIAL_VALUE)) {
@@ -29,17 +38,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
             }
 
             try {
-                runInTransaction(entityManagerFactory, entityManager2 -> {
-                    String value = getValue(entityManager2);
-                    if (!value.equals(INITIAL_VALUE)) {
-                        throw new RuntimeException();
-                    }
-
-                    TestModel testModel = new TestModel();
-                    testModel.setId(1);
-                    testModel.setValue("changed by 2nd transaction");
-                    entityManager2.merge(testModel);
-                });
+                runSecondTransaction(entityManagerFactory);
             } catch (RollbackException e) {
                 log.error("2nd transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
                 return false;
@@ -53,6 +52,20 @@ public class NonRepeatableReadAnalysis implements Analysis {
             } else {
                 throw new RuntimeException("Unexpected value " + value);
             }
+        });
+    }
+
+    private void runSecondTransaction(EntityManagerFactory entityManagerFactory) {
+        runInTransaction(entityManagerFactory, entityManager2 -> {
+            String value = getValue(entityManager2);
+            if (!value.equals(INITIAL_VALUE)) {
+                throw new RuntimeException();
+            }
+
+            TestModel testModel = new TestModel();
+            testModel.setId(1);
+            testModel.setValue("changed by 2nd transaction");
+            entityManager2.merge(testModel);
         });
     }
 

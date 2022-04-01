@@ -1,6 +1,7 @@
 package com.example.isolationlevelsdemo.service;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import static com.example.isolationlevelsdemo.Constants.RESULTS_OUTPUT_PATH;
 import static java.util.stream.Collectors.joining;
 
 @Component
+@Slf4j
 public class CSVResultWriter {
     private static final int CELL_SIZE = 20;
 
@@ -21,6 +23,7 @@ public class CSVResultWriter {
         for (DatabaseAnalysisResultTable table : tables) {
             String fileName = table.getDatabaseName().replace(":", "_");
             String filePath = RESULTS_OUTPUT_PATH + fileName + ".csv";
+            log.info("Writing table to the csv file " + filePath);
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
             try (writer) {
                 writeLines(table, writer);
