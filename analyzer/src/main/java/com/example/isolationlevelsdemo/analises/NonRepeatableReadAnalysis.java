@@ -1,6 +1,7 @@
 package com.example.isolationlevelsdemo.analises;
 
 import com.example.isolationlevelsdemo.model.TestModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 
 @Component
+@Slf4j
 public class NonRepeatableReadAnalysis implements Analysis {
     @Override
     public String getEffectName() {
@@ -39,6 +41,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
                     entityManager2.merge(testModel);
                 });
             } catch (RollbackException e) {
+                log.error("2nd transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
                 return false;
             }
 
