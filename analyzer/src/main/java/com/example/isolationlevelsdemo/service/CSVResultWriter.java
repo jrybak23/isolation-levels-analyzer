@@ -21,7 +21,8 @@ public class CSVResultWriter {
     @SneakyThrows
     public void writeToFiles(List<DatabaseAnalysisResultTable> tables) {
         for (DatabaseAnalysisResultTable table : tables) {
-            String fileName = table.getDatabaseName().replace(":", "_");
+            String fileName = table.getDatabaseName().replace(":", "_")
+                    .replace("/", "-");
             String filePath = RESULTS_OUTPUT_PATH + fileName + ".csv";
             log.info("Writing table to the csv file " + filePath);
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));

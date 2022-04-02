@@ -7,16 +7,18 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.QueryTimeoutException;
 import javax.persistence.RollbackException;
 import java.util.Optional;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
+import static com.example.isolationlevelsdemo.Constants.LOCK_TIMEOUT;
 import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
 
 @Component
 @Slf4j
 public class LostUpdateAnalysis implements Analysis {
+
     @Override
     public String getEffectName() {
         return "Lost Update";
@@ -66,17 +68,24 @@ public class LostUpdateAnalysis implements Analysis {
         });
     }
 
-    private void runSecondTransaction(EntityManagerFactory entityManagerFactory) {
-        runInTransaction(entityManagerFactory, entityManager2 -> {
+    private Optional<Result> runSecondTransaction(EntityManagerFactory entityManagerFactory) {
+        return runInTransactionAndReturnValue(entityManagerFactory, entityManager2 -> {
             String value = getValue(entityManager2);
             if (!value.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
             }
 
-            TestModel testModel = new TestModel();
-            testModel.setId(1);
-            testModel.setValue(value + " updated by 2nd transaction");
-            entityManager2.merge(testModel);
+            try {
+                entityManager2.createQuery("update TestModel t set t.value = :value where t.id = 1")
+                        .setParameter("value", value + " updated by 2nd transaction")
+                        .setHint("jakarta.persistence.query.timeout", LOCK_TIMEOUT)
+                        .executeUpdate();
+            } catch (QueryTimeoutException e) {
+                log.info("Lock timeout while updating using 2nd transaction to check " + getEffectName() + ". So it's not reproduced.", e);
+                return Optional.of(Result.NOT_REPRODUCED);
+            }
+
+            return Optional.empty();
         });
     }
 

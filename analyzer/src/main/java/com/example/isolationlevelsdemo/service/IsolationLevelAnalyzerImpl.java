@@ -26,9 +26,6 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Slf4j
 public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String DB_NAME = "db_name";
 
     @Autowired
     List<Analysis> analyses;
@@ -52,7 +49,7 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
         String dockerImageName = container.getDockerImageName();
         DatabaseAnalysisResult databaseAnalysisResult = new DatabaseAnalysisResult(dockerImageName);
         log.info("Analyzing database " + dockerImageName);
-        startContainer(container);
+        container.start();
         for (IsolationLevel isolationLevel : IsolationLevel.values()) {
             IsolationLevelAnalysisResult isolationLevelAnalysis = new IsolationLevelAnalysisResult(isolationLevel.getDisplayName());
             databaseAnalysisResult.addIsolationLevelAnalysis(isolationLevelAnalysis);
@@ -61,7 +58,7 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
                     databaseToAnalyze.getDialect());
             for (Analysis analysis : analyses) {
                 String effectName = analysis.getEffectName();
-                log.info("Performing {} with isolation level {} for DB {}", effectName, isolationLevel, dockerImageName);
+                log.info("Preparing for {} analysis with isolation level {} for DB {}", effectName, isolationLevel, dockerImageName);
                 cleanTable(emFactory);
                 populateDB(emFactory);
                 boolean reproduced = analysis.isReproducible(emFactory);
@@ -98,19 +95,12 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
     private DataSource createDatasource(JdbcDatabaseContainer<?> db, IsolationLevel isolationLevel) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(db.getJdbcUrl());
-        config.setUsername(USERNAME);
-        config.setPassword(PASSWORD);
+        config.setUsername(db.getUsername());
+        config.setPassword(db.getPassword());
         config.setDriverClassName(db.getJdbcDriverInstance().getClass().getName());
         config.setTransactionIsolation(isolationLevel.getJdbcName());
         config.setAutoCommit(false);
         return new HikariDataSource(config);
     }
 
-    private void startContainer(JdbcDatabaseContainer<?> container) {
-        container
-                .withDatabaseName(DB_NAME)
-                .withUsername(USERNAME)
-                .withPassword(PASSWORD)
-                .start();
-    }
 }
