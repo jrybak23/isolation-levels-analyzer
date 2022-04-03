@@ -1,5 +1,6 @@
 package com.example.isolationlevelsdemo.analises;
 
+import com.example.isolationlevelsdemo.TransactionUtils;
 import com.example.isolationlevelsdemo.model.TestModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,8 +11,7 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.RollbackException;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
+import static com.example.isolationlevelsdemo.TransactionUtils.*;
 
 @Component
 @Slf4j
@@ -32,7 +32,7 @@ public class SerializationAnomalyAnalysis implements Analysis {
     }
 
     private boolean runFirstTransaction(EntityManagerFactory entityManagerFactory) {
-        return runInTransactionAndReturnValue(entityManagerFactory, entityManager1 -> {
+        return runInTheFirstTransactionAndReturnResult(entityManagerFactory, entityManager1 -> {
             String value1 = getValue(entityManager1);
             if (!value1.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
@@ -61,7 +61,7 @@ public class SerializationAnomalyAnalysis implements Analysis {
     }
 
     private void runSecondTransaction(EntityManagerFactory entityManagerFactory) {
-        runInTransaction(entityManagerFactory, entityManager2 -> {
+        TransactionUtils.runInTheSecondTransaction(entityManagerFactory, entityManager2 -> {
             String value2 = getValue(entityManager2);
             if (!value2.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();

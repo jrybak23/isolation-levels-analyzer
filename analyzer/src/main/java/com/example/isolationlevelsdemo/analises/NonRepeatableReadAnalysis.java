@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
 import static com.example.isolationlevelsdemo.Constants.LOCK_TIMEOUT;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
+import static com.example.isolationlevelsdemo.TransactionUtils.*;
 
 @Component
 @Slf4j
@@ -35,7 +35,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
     }
 
     private boolean runFirstTransaction(EntityManagerFactory entityManagerFactory) {
-        return runInTransactionAndReturnValue(entityManagerFactory, entityManager1 -> {
+        return runInTheFirstTransactionAndReturnResult(entityManagerFactory, entityManager1 -> {
             String initialValue = getValue(entityManager1);
             if (!initialValue.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
@@ -65,7 +65,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
     }
 
     private Optional<Result> runSecondTransaction(EntityManagerFactory entityManagerFactory) {
-        return runInTransactionAndReturnValue(entityManagerFactory, entityManager2 -> {
+        return runInTheSecondTransactionAndReturnResult(entityManagerFactory, entityManager2 -> {
             String value = getValue(entityManager2);
             if (!value.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();

@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
 import static com.example.isolationlevelsdemo.Constants.LOCK_TIMEOUT;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
+import static com.example.isolationlevelsdemo.TransactionUtils.*;
 
 @Component
 @Slf4j
@@ -31,7 +31,7 @@ public class DirtyReadAnalysis implements Analysis {
 
     private boolean runFirstTransaction(EntityManagerFactory entityManagerFactory) {
         log.info("Starting the 1st transaction to perform " + getEffectName() + " analysis.");
-        return runInTransactionAndReturnValue(entityManagerFactory, entityManager1 -> {
+        return runInTheFirstTransactionAndReturnResult(entityManagerFactory, entityManager1 -> {
             String initialValue = getValue(entityManager1);
             if (!initialValue.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
@@ -47,7 +47,7 @@ public class DirtyReadAnalysis implements Analysis {
     }
 
     private boolean runSecondTransaction(EntityManagerFactory entityManagerFactory, EntityManager entityManager1) {
-        return runInTransactionAndReturnValue(entityManagerFactory, entityManager2 -> {
+        return runInTheSecondTransactionAndReturnResult(entityManagerFactory, entityManager2 -> {
             String initialValue2 = getValue(entityManager1);
             if (!initialValue2.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();

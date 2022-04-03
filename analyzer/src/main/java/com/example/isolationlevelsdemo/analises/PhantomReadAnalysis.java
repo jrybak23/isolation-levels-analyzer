@@ -12,8 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransaction;
-import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionAndReturnValue;
+import static com.example.isolationlevelsdemo.TransactionUtils.*;
 
 @Component
 @Slf4j
@@ -34,7 +33,7 @@ public class PhantomReadAnalysis implements Analysis {
     }
 
     private Boolean runFirstTransaction(EntityManagerFactory entityManagerFactory) {
-        return runInTransactionAndReturnValue(entityManagerFactory, entityManager1 -> {
+        return runInTheFirstTransactionAndReturnResult(entityManagerFactory, entityManager1 -> {
             String value1 = getValue(entityManager1);
             if (!value1.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
@@ -59,7 +58,7 @@ public class PhantomReadAnalysis implements Analysis {
     }
 
     private void runSecondTransaction(EntityManagerFactory entityManagerFactory) {
-        runInTransaction(entityManagerFactory, entityManager2 -> {
+        runInTheSecondTransaction(entityManagerFactory, entityManager2 -> {
             String value2 = getValue(entityManager2);
             if (!value2.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
