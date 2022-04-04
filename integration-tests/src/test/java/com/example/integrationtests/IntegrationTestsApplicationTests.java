@@ -19,7 +19,7 @@ class IntegrationTestsApplicationTests {
     public static final String RESULTS_OUTPUT_PATH = ".." + File.separator + "results-ui/src/assets/results" + File.separator;
 
     @ParameterizedTest
-    @ValueSource(strings = {"mysql_8", "postgres_14"})
+    @ValueSource(strings = {"mysql_8", "postgres_14", "gvenzl-oracle-xe_18"})
     void assertKnowDatabaseResult(String database) {
         String actualFileContent = readFileContent(RESULTS_OUTPUT_PATH + database + ".csv");
         String expectedFileContent = readClasspathFileContent("results/"  + database + ".csv");

@@ -19,7 +19,7 @@ public class TransactionUtils {
     }
 
     public static void runInTheSecondTransaction(EntityManagerFactory entityManagerFactory, Consumer<EntityManager> function) {
-        wrapWithTransactionAndReturnResult(entityManagerFactory, "1st", entityManager -> {
+        wrapWithTransactionAndReturnResult(entityManagerFactory, "2nd", entityManager -> {
             function.accept(entityManager);
             return Optional.empty();
         });

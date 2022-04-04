@@ -50,7 +50,7 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
         DatabaseAnalysisResult databaseAnalysisResult = new DatabaseAnalysisResult(dockerImageName);
         log.info("Analyzing database " + dockerImageName);
         container.start();
-        for (IsolationLevel isolationLevel : IsolationLevel.values()) {
+        for (IsolationLevel isolationLevel : databaseToAnalyze.getSupportedIsolationLevels()) {
             IsolationLevelAnalysisResult isolationLevelAnalysis = new IsolationLevelAnalysisResult(isolationLevel.getDisplayName());
             databaseAnalysisResult.addIsolationLevelAnalysis(isolationLevelAnalysis);
             DataSource dataSource = createDatasource(container, isolationLevel);

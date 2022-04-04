@@ -6,10 +6,7 @@ import com.example.isolationlevelsdemo.model.TestModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.OptimisticLockException;
-import javax.persistence.RollbackException;
+import javax.persistence.*;
 import java.util.Optional;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
@@ -66,6 +63,9 @@ public class SerializationAnomalyAnalysis implements Analysis {
                 entityManager1.persist(model);
                 entityManager1.flush();
             } catch (OptimisticLockException e) {
+                log.info("Failed to insert using the first transaction. So " + getEffectName() + " is not reproduced.", e);
+                return Optional.of(Result.NOT_REPRODUCED);
+            } catch (PersistenceException e) { // for oracle support
                 log.info("Failed to insert using the first transaction. So " + getEffectName() + " is not reproduced.", e);
                 return Optional.of(Result.NOT_REPRODUCED);
             }
