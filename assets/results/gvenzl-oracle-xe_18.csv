@@ -1,0 +1,3 @@
+                    ,Dirty Read          ,Lost Update         ,Non Repeatable Read ,Phantom Read        ,Serialization Anomaly
+Read Committed      ,not reproduced      ,not reproduced      ,reproduced          ,reproduced          ,reproduced          
+Serializable        ,not reproduced      ,not reproduced      ,not reproduced      ,not reproduced      ,not reproduced      
