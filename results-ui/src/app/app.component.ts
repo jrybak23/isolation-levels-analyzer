@@ -24,8 +24,4 @@ export class AppComponent implements OnInit {
     const className = columnHeader.replace(/\s/g, '') + 'Analysis.java';
     return this.SOURCE_CODE_LINK_PREFIX + className;
   }
-
-  getDockerImageLink(imageName: string) {
-    return 'https://hub.docker.com/_/' + imageName.split(':')[0];
-  }
 }

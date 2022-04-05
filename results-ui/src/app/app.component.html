@@ -1,5 +1,5 @@
 <ng-container *ngFor="let result of (results | async)">
-  <h2><a [href]="getDockerImageLink(result.databaseName)" target="_blank">{{result.databaseName}}</a></h2>
+  <h2><a [href]="result.dockerHubLink" target="_blank">{{result.databaseName}}</a></h2>
   <table >
     <thead>
     <tr>

@@ -3,10 +3,12 @@ package com.example.isolationlevelsdemo.service;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 
 @ToString
@@ -26,5 +28,16 @@ public class DatabaseAnalysisResultTable {
         List<String> row = Stream.concat(Stream.of(rowHeader), cellValues.stream())
                 .collect(toList());
         table.add(row);
+    }
+
+    @SuppressWarnings("unused")
+    public String getDockerHubLink() {
+        String baseUrl = "https://www.google.com/search?";
+        return baseUrl + "q=" + getSearchParamValue() + "&num=1&as_sitesearch=hub.docker.com";
+    }
+
+    private String getSearchParamValue() {
+        String imageNameWithoutTag = databaseName.split(":")[0];
+        return "docker+hub+" + URLEncoder.encode(imageNameWithoutTag, UTF_8);
     }
 }

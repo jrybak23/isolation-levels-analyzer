@@ -1,4 +1,5 @@
 export interface Result {
   databaseName: string;
-  table: Array<Array<string>>
+  dockerHubLink: string;
+  table: Array<Array<string>>;
 }
