@@ -13,7 +13,7 @@ import static com.example.isolationlevelsdemo.IsolationLevel.READ_COMMITTED;
 import static com.example.isolationlevelsdemo.IsolationLevel.SERIALIZABLE;
 
 @Component
-public class OracleXE implements DatabaseToAnalyze {
+public class OracleXE18 implements DatabaseToAnalyze {
 
     public static final List<IsolationLevel> SUPPORTED_ISOLATION_LEVELS = List.of(READ_COMMITTED, SERIALIZABLE);
 

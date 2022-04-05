@@ -14,7 +14,7 @@ import static com.example.isolationlevelsdemo.TransactionUtils.*;
 @Slf4j
 public class DirtyReadAnalysis implements Analysis {
     @Override
-    public String getEffectName() {
+    public String getPhenomenaName() {
         return "Dirty Read";
     }
 
@@ -23,24 +23,24 @@ public class DirtyReadAnalysis implements Analysis {
         try {
             return runFirstTransaction(entityManagerFactory);
         } catch (RollbackException e) {
-            log.error("1st transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+            log.error("1st transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
             return false;
         }
 
     }
 
     private boolean runFirstTransaction(EntityManagerFactory entityManagerFactory) {
-        log.info("Starting the 1st transaction to perform " + getEffectName() + " analysis.");
+        log.info("Starting the 1st transaction to perform " + getPhenomenaName() + " analysis.");
         return runInTheFirstTransactionAndReturnResult(entityManagerFactory, entityManager1 -> {
             String initialValue = getValue(entityManager1);
             if (!initialValue.equals(INITIAL_VALUE)) {
                 throw new RuntimeException();
             }
             try {
-                log.info("Starting the 2nd transaction to perform {} analysis.", getEffectName());
+                log.info("Starting the 2nd transaction to perform {} analysis.", getPhenomenaName());
                 return runSecondTransaction(entityManagerFactory, entityManager1);
             } catch (RollbackException e) {
-                log.error("2nd transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+                log.error("2nd transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
                 return false;
             }
         });
@@ -59,7 +59,7 @@ public class DirtyReadAnalysis implements Analysis {
                         .setHint("jakarta.persistence.query.timeout", LOCK_TIMEOUT)
                         .executeUpdate();
             } catch (QueryTimeoutException e) {
-                log.info("Lock timeout while updating using 2nd transaction to check " + getEffectName() + ". So it's not reproduced.", e);
+                log.info("Lock timeout while updating using 2nd transaction to check " + getPhenomenaName() + ". So it's not reproduced.", e);
                 return false;
             } catch (PessimisticLockException e) {
                 return false;
@@ -69,7 +69,7 @@ public class DirtyReadAnalysis implements Analysis {
             try {
                 value = getValue(entityManager1);
             } catch (QueryTimeoutException e) {
-                log.info("Lock timeout while reading using 1st transaction to check " + getEffectName() + ". So it's not reproduced.", e);
+                log.info("Lock timeout while reading using 1st transaction to check " + getPhenomenaName() + ". So it's not reproduced.", e);
                 return false;
             }
             return value.equals("changed by 2nd transaction");

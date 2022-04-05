@@ -1,5 +1,6 @@
 package com.example.integrationtests;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.integrationtests.JSONAssertUtil.assertJSON;
 import static com.example.integrationtests.TestUtil.readClasspathFileContent;
 import static com.example.integrationtests.TestUtil.readFileContent;
 import static java.util.stream.Collectors.toList;
@@ -40,6 +42,13 @@ class IntegrationTestsApplicationTests {
        return Arrays.stream(line.split(","))
                .map(String::trim)
                .collect(toList());
+    }
+
+    @Test
+    void assertResult() {
+        String actualFileContent = readFileContent(RESULTS_OUTPUT_PATH + "result.json");
+        String expectedFileContent = readClasspathFileContent("results/result.json");
+        assertJSON(expectedFileContent, actualFileContent);
     }
 
 }

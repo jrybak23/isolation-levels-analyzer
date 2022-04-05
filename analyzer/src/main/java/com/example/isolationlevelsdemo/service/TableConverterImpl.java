@@ -36,7 +36,7 @@ public class TableConverterImpl implements TableConverter {
 
     private List<String> getColumnHeaders() {
         return analyses.stream()
-                .map(Analysis::getEffectName)
+                .map(Analysis::getPhenomenaName)
                 .collect(toList());
     }
 }

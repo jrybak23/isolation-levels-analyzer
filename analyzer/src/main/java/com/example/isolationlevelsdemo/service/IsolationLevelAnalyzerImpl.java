@@ -57,14 +57,14 @@ public class IsolationLevelAnalyzerImpl implements IsolationLevelAnalyzer {
             EntityManagerFactory emFactory = entityManagerFactoryFactory.getEntityManagerFactory(dataSource,
                     databaseToAnalyze.getDialect());
             for (Analysis analysis : analyses) {
-                String effectName = analysis.getEffectName();
-                log.info("Preparing for {} analysis with isolation level {} for DB {}", effectName, isolationLevel, dockerImageName);
+                String phenomenaName = analysis.getPhenomenaName();
+                log.info("Preparing for {} analysis with isolation level {} for DB {}", phenomenaName, isolationLevel, dockerImageName);
                 cleanTable(emFactory);
                 populateDB(emFactory);
                 boolean reproduced = analysis.isReproducible(emFactory);
                 String result = getResultAsString(reproduced);
-                log.info("{} is {} with isolation level {} for {}", effectName, result, isolationLevel, dockerImageName);
-                AnalysisResult analysisResult = new AnalysisResult(effectName, result);
+                log.info("{} is {} with isolation level {} for {}", phenomenaName, result, isolationLevel, dockerImageName);
+                AnalysisResult analysisResult = new AnalysisResult(phenomenaName, result);
                 isolationLevelAnalysis.addAnalysis(analysisResult);
             }
         }

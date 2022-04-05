@@ -17,7 +17,7 @@ import static com.example.isolationlevelsdemo.TransactionUtils.runInTransactionA
 @Slf4j
 public class SerializationAnomalyAnalysis implements Analysis {
     @Override
-    public String getEffectName() {
+    public String getPhenomenaName() {
         return "Serialization Anomaly";
     }
 
@@ -27,7 +27,7 @@ public class SerializationAnomalyAnalysis implements Analysis {
         try {
             result = runFirstTransaction(entityManagerFactory);
         } catch (RollbackException e) {
-            log.error("1st transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+            log.error("1st transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
             return false;
         }
 
@@ -52,7 +52,7 @@ public class SerializationAnomalyAnalysis implements Analysis {
             try {
                 runSecondTransaction(entityManagerFactory);
             } catch (RollbackException e) {
-                log.error("2nd transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+                log.error("2nd transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
                 return Optional.of(Result.NOT_REPRODUCED);
             }
 
@@ -63,10 +63,10 @@ public class SerializationAnomalyAnalysis implements Analysis {
                 entityManager1.persist(model);
                 entityManager1.flush();
             } catch (OptimisticLockException e) {
-                log.info("Failed to insert using the first transaction. So " + getEffectName() + " is not reproduced.", e);
+                log.info("Failed to insert using the first transaction. So " + getPhenomenaName() + " is not reproduced.", e);
                 return Optional.of(Result.NOT_REPRODUCED);
             } catch (PersistenceException e) { // for oracle support
-                log.info("Failed to insert using the first transaction. So " + getEffectName() + " is not reproduced.", e);
+                log.info("Failed to insert using the first transaction. So " + getPhenomenaName() + " is not reproduced.", e);
                 return Optional.of(Result.NOT_REPRODUCED);
             }
 

@@ -7,11 +7,11 @@ import lombok.ToString;
 @Getter
 public class AnalysisResult {
 
-    private final String effectName;
+    private final String phenomenaName;
     private final String result;
 
-    public AnalysisResult(String effectName, String result) {
-        this.effectName = effectName;
+    public AnalysisResult(String phenomenaName, String result) {
+        this.phenomenaName = phenomenaName;
         this.result = result;
     }
 }

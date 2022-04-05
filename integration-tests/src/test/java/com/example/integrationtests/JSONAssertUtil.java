@@ -1,4 +1,4 @@
-package com.example.isolationlevelsdemo.testutil;
+package com.example.integrationtests;
 
 import lombok.SneakyThrows;
 import org.json.JSONArray;
@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareResult;
 
-import static org.junit.Assert.assertEquals;
 import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 public class JSONAssertUtil {
     private static final int INDENT_SPACES = 2;

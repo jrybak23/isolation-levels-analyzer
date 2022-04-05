@@ -3,7 +3,7 @@ package com.example.isolationlevelsdemo.analises;
 import javax.persistence.EntityManagerFactory;
 
 public interface Analysis {
-    String getEffectName();
+    String getPhenomenaName();
 
     boolean isReproducible(EntityManagerFactory entityManagerFactory);
 }

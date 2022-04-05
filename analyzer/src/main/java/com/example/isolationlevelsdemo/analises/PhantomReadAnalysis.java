@@ -18,7 +18,7 @@ import static com.example.isolationlevelsdemo.TransactionUtils.*;
 @Slf4j
 public class PhantomReadAnalysis implements Analysis {
     @Override
-    public String getEffectName() {
+    public String getPhenomenaName() {
         return "Phantom Read";
     }
 
@@ -27,7 +27,7 @@ public class PhantomReadAnalysis implements Analysis {
         try {
             return runFirstTransaction(entityManagerFactory);
         } catch (RollbackException e) {
-            log.error("1st transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+            log.error("1st transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
             return false;
         }
     }
@@ -42,7 +42,7 @@ public class PhantomReadAnalysis implements Analysis {
             try {
                 runSecondTransaction(entityManagerFactory);
             } catch (RollbackException e) {
-                log.error("2nd transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+                log.error("2nd transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
                 return false;
             }
 

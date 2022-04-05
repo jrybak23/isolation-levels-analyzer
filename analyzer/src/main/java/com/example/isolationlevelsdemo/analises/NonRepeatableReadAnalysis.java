@@ -20,7 +20,7 @@ import static com.example.isolationlevelsdemo.TransactionUtils.*;
 @Slf4j
 public class NonRepeatableReadAnalysis implements Analysis {
     @Override
-    public String getEffectName() {
+    public String getPhenomenaName() {
         return "Non Repeatable Read";
     }
 
@@ -29,7 +29,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
         try {
             return runFirstTransaction(entityManagerFactory);
         } catch (RollbackException e) {
-            log.error("1st transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+            log.error("1st transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
             return false;
         }
     }
@@ -45,7 +45,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
             try {
                 result = runSecondTransaction(entityManagerFactory);
             } catch (RollbackException e) {
-                log.error("2nd transaction is failed to commit. So " + getEffectName() + " wasn't reproduced.", e);
+                log.error("2nd transaction is failed to commit. So " + getPhenomenaName() + " wasn't reproduced.", e);
                 return false;
             }
 
@@ -77,7 +77,7 @@ public class NonRepeatableReadAnalysis implements Analysis {
                         .setHint("jakarta.persistence.query.timeout", LOCK_TIMEOUT)
                         .executeUpdate();
             } catch (QueryTimeoutException e) {
-                log.info("Lock timeout while updating using 2nd transaction to check " + getEffectName() + ". So it's not reproduced.", e);
+                log.info("Lock timeout while updating using 2nd transaction to check " + getPhenomenaName() + ". So it's not reproduced.", e);
                 return Optional.of(Result.NOT_REPRODUCED);
             }
 
