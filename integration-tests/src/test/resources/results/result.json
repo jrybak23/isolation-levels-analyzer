@@ -1,5 +1,51 @@
 [
   {
+    "databaseName": "cockroachdb/cockroach:v21.2.8",
+    "table": [
+      [
+        "",
+        "Dirty Read",
+        "Lost Update",
+        "Non Repeatable Read",
+        "Phantom Read",
+        "Serialization Anomaly"
+      ],
+      [
+        "Read Uncommitted",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "reproduced"
+      ],
+      [
+        "Read Committed",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "reproduced"
+      ],
+      [
+        "Repeatable Read",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "reproduced"
+      ],
+      [
+        "Serializable",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "not reproduced",
+        "reproduced"
+      ]
+    ],
+    "dockerHubLink": "https://www.google.com/search?q=docker+hub+cockroachdb%2Fcockroach&num=1&as_sitesearch=hub.docker.com"
+  },
+  {
     "databaseName": "mariadb:10.7",
     "table": [
       [
