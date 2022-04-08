@@ -1,5 +1,6 @@
 package com.example.isolationlevelsdemo;
 
+import com.example.isolationlevelsdemo.config.AppProperties;
 import com.example.isolationlevelsdemo.dto.DatabaseAnalysisResult;
 import com.example.isolationlevelsdemo.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @SpringBootApplication
+@EnableConfigurationProperties(AppProperties.class)
 @Slf4j
 public class IsolationLevelsAnalyzerApplication implements CommandLineRunner, ExitCodeGenerator {
 

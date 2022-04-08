@@ -1,18 +1,24 @@
 package com.example.isolationlevelsdemo.analises;
 
+import com.example.isolationlevelsdemo.config.AppProperties;
 import com.example.isolationlevelsdemo.model.TestModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 import static com.example.isolationlevelsdemo.Constants.INITIAL_VALUE;
-import static com.example.isolationlevelsdemo.Constants.LOCK_TIMEOUT;
-import static com.example.isolationlevelsdemo.TransactionUtils.*;
+import static com.example.isolationlevelsdemo.TransactionUtils.runInTheFirstTransactionAndReturnResult;
+import static com.example.isolationlevelsdemo.TransactionUtils.runInTheSecondTransactionAndReturnResult;
 
 @Component
 @Slf4j
 public class DirtyReadAnalysis implements Analysis {
+
+    @Autowired
+    private AppProperties appProperties;
+
     @Override
     public String getPhenomenaName() {
         return "Dirty Read";
@@ -56,7 +62,7 @@ public class DirtyReadAnalysis implements Analysis {
             try {
                 entityManager2.createQuery("update TestModel t set t.value = :value where t.id = 1")
                         .setParameter("value", "changed by 2nd transaction")
-                        .setHint("jakarta.persistence.query.timeout", LOCK_TIMEOUT)
+                        .setHint("jakarta.persistence.query.timeout", appProperties.getLockTimeout())
                         .executeUpdate();
             } catch (QueryTimeoutException e) {
                 log.info("Lock timeout while updating using 2nd transaction to check " + getPhenomenaName() + ". So it's not reproduced.", e);
@@ -79,7 +85,7 @@ public class DirtyReadAnalysis implements Analysis {
     private String getValue(EntityManager entityManager) {
         entityManager.clear();
         TestModel model = (TestModel) entityManager.createQuery("from TestModel t where t.id = 1")
-                .setHint("jakarta.persistence.query.timeout", LOCK_TIMEOUT)
+                .setHint("jakarta.persistence.query.timeout", appProperties.getLockTimeout())
                 .getResultList().get(0);
         return model.getValue();
     }

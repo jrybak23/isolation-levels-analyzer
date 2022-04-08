@@ -1,19 +1,22 @@
 package com.example.isolationlevelsdemo.service;
 
+import com.example.isolationlevelsdemo.config.AppProperties;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
 import java.util.List;
 
-import static com.example.isolationlevelsdemo.Constants.RESULTS_OUTPUT_PATH;
 
 @Component
 @Slf4j
 public class JsonResultWriter {
+
+    @Autowired
+    private AppProperties appProperties;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -24,6 +27,6 @@ public class JsonResultWriter {
     public void writeToFile(List<DatabaseAnalysisResultTable> tables) {
         log.info("Writing tables to json file.");
         String json = objectMapper.writeValueAsString(tables);
-        resultFileGenerator.writeToFile(json,RESULTS_OUTPUT_PATH + "result.json");
+        resultFileGenerator.writeToFile(json,appProperties.getResultsOutputPath() + "result.json");
     }
 }

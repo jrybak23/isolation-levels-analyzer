@@ -1,8 +1,10 @@
 package com.example.isolationlevelsdemo.service;
 
+import com.example.isolationlevelsdemo.config.AppProperties;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -10,7 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import static com.example.isolationlevelsdemo.Constants.RESULTS_OUTPUT_PATH;
 import static java.util.stream.Collectors.joining;
 
 @Component
@@ -18,12 +19,15 @@ import static java.util.stream.Collectors.joining;
 public class CSVResultWriter {
     private static final int CELL_SIZE = 20;
 
+    @Autowired
+    private AppProperties appProperties;
+
     @SneakyThrows
     public void writeToFiles(List<DatabaseAnalysisResultTable> tables) {
         for (DatabaseAnalysisResultTable table : tables) {
             String fileName = table.getDatabaseName().replace(":", "_")
                     .replace("/", "-");
-            String filePath = RESULTS_OUTPUT_PATH + fileName + ".csv";
+            String filePath = appProperties.getResultsOutputPath() + fileName + ".csv";
             log.info("Writing table to the csv file " + filePath);
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
             try (writer) {
